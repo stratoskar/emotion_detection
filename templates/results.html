@@ -3,76 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emotion Prediction</title>
+    <title>Emotion Prediction Results</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             background-color: #f8f9fa;
-            padding-top: 80px;
+            padding-top: 50px;
             font-family: sans-serif;
-            text-align: center; /* Center the content */
         }
+
         .container {
-            max-width: 500px;
+            max-width: 800px;
             margin: 0 auto;
             background-color: #fff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
-            color: #343a40;
-            margin-bottom: 30px;
-        }
-        .alert {
+            text-align: center;
             margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 6px;
-            font-size: 1.2em;
+        }
+
+        #execution-plan {
+            width: 100%;
+            height: 400px; /* Adjust height as needed */
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        .node-label {
+            font-size: 12px;
             font-weight: bold;
         }
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border-color: #c3e6cb;
-        }
-        .alert-info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border-color: #bee5eb;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-            transition: background-color 0.3s ease;
-        }
-        .btn-secondary:hover {
-            background-color: #545b62;
-            border-color: #545b62;
-        }
-        a.btn {
-            margin-top: 20px;
-            display: inline-block; /* Ensure buttons are inline */
+
+        .edge-label {
+            font-size: 10px;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.22.1/cytoscape.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1 class="mb-4">Emotion Prediction</h1>
-        {% if prediction %}
-        <div class="alert alert-success">
-            The predicted emotion is: <strong>{{ prediction.capitalize() }}</strong>
-        </div>
-        <a href="/" class="btn btn-secondary">Upload Another Image</a>
-        {% else %}
-        <div class="alert alert-info">
-            No prediction available. Please upload an image.
-        </div>
-        <a href="/" class="btn btn-secondary">Go Back to Upload</a>
-        {% endif %}
+        <h1>Emotion Prediction Results</h1>
+
+        <div id="execution-plan"></div>
+
+        <p>Predicted Emotion: <strong>{{ execution_plan.predicted_emotion.capitalize() }}</strong></p>
+        <p>Original Image Path: {{ execution_plan.original_image_path }}</p>
+        <p>Preprocessed Image Shape: {{ execution_plan.preprocessed_shape }}</p>
+        <p>Model Architecture: {{ execution_plan.model_architecture }}</p>
+        <p>All Emotion Probabilities: {{ execution_plan.all_emotions_probabilities }}</p>
+
+        <a href="/" class="btn btn-primary">Try Another Image</a>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var cy = cytoscape({
+                container: document.getElementById('execution-plan'),
+                elements: [
+                    { data: { id: 'upload', label: 'Uploaded Image' }, classes: 'node' },
+                    { data: { id: 'grayscale', label: 'Grayscale' }, classes: 'node' },
+                    { data: { id: 'resize', label: 'Resize' }, classes: 'node' },
+                    { data: { id: 'expand_dims', label: 'Expand Dims' }, classes: 'node' },
+                    { data: { id: 'normalize', label: 'Normalize' }, classes: 'node' },
+                    { data: { id: 'model_input', label: 'Model Input' }, classes: 'node' },
+                    { data: { id: 'model', label: 'Model', shape: 'roundrectangle' }, classes: 'node' },
+                    { data: { id: 'output', label: 'Output' }, classes: 'node' },
+
+                    { data: { source: 'upload', target: 'grayscale', label: 'Load' }, classes: 'edge' },
+                    { data: { source: 'grayscale', target: 'resize', label: 'Convert' }, classes: 'edge' },
+                    { data: { source: 'resize', target: 'expand_dims', label: 'Resize' }, classes: 'edge' },
+                    { data: { source: 'expand_dims', target: 'normalize', label: 'Expand' }, classes: 'edge' },
+                    { data: { source: 'normalize', target: 'model_input', label: 'Normalize' }, classes: 'edge' },
+                    { data: { source: 'model_input', target: 'model', label: 'Feed' }, classes: 'edge' },
+                    { data: { source: 'model', target: 'output', label: 'Predict' }, classes: 'edge' }
+                ],
+                style: [
+                    {
+                        selector: '.node',
+                        style: {
+                            'background-color': '#666',
+                            'label': 'data(label)',
+                            'width': '60px',
+                            'height': '60px',
+                            'text-valign': 'center',
+                            'text-halign': 'center',
+                            'font-size': '10px',
+                            'color': 'white'
+                        }
+                    },
+                    {
+                        selector: '.node[shape="roundrectangle"]',
+                        style: {
+                            'shape': 'roundrectangle',
+                            'width': '80px',
+                            'height': '80px'
+                        }
+                    },
+                    {
+                        selector: '.edge',
+                        style: {
+                            'width': 2,
+                            'line-color': '#888',
+                            'target-arrow-color': '#888',
+                            'target-arrow-shape': 'triangle',
+                            'curve-style': 'bezier',
+                            'label': 'data(label)',
+                            'font-size': '10px'
+                        }
+                    }
+                ],
+                layout: {
+                    name: 'grid',
+                    rows: 2
+                }
+            });
+        });
+    </script>
 </body>
 </html>
