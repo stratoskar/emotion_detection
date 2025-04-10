@@ -11,13 +11,14 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-os.makedirs(UPLOAD_FOLDER, exist_ok=True) # Create the upload folder if it doesn't exist
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Create the upload folder if it doesn't exist
 
 # Load your trained model
-model_path = 'emotion_recognition_model_fer.h5'
+model_path = 'models/emotion_recognition_model_fer_3conv.h5'
 try:
     model = load_model(model_path)
-    emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
+    emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad',
+                      'surprise']
 except Exception as e:
     print(f"Error loading the model: {e}")
     model = None
@@ -26,28 +27,39 @@ except Exception as e:
 # Define the target image size used during training
 img_width, img_height = 48, 48
 
+
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[
+        1].lower() in ALLOWED_EXTENSIONS
+
 
 def preprocess_image(img_path):
     try:
-        img = image.load_img(img_path, target_size=(img_width, img_height), color_mode='grayscale')
+        # Load the image in grayscale and resize it to the target size
+        img = image.load_img(img_path, target_size=(img_width, img_height),
+                              color_mode='grayscale')
+        # Convert the image to a numpy array
         img_array = image.img_to_array(img)
+        # Expand the dimensions of the array to match the model's expected input shape
         img_array = np.expand_dims(img_array, axis=0)
+        # Normalize the pixel values to be between 0 and 1
         img_array = img_array / 255.0
         return img_array
     except Exception as e:
         print(f"Error preprocessing image: {e}")
         return None
 
+
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
+
 @app.route('/predict', methods=['POST'])
 def predict():
     if model is None:
-        return render_template('index.html', error="Model not loaded. Please check the server.")
+        return render_template('index.html',
+                              error="Model not loaded. Please check the server.")
 
     if 'image' not in request.files:
         return render_template('index.html', error='No file part')
@@ -59,26 +71,42 @@ def predict():
 
     if file and allowed_file(file.filename):
         try:
+            # Secure the filename to prevent path traversal vulnerabilities
             filename = secure_filename(file.filename)
+            # Construct the full filepath where the uploaded image will be saved
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            # Save the uploaded file to the specified path
             file.save(filepath)
 
+            # Preprocess the saved image using the preprocess_image function
             processed_image = preprocess_image(filepath)
 
+            # If there was an error during preprocessing, clean up and return an error
             if processed_image is None:
-                os.remove(filepath) # Clean up if processing fails
-                return render_template('index.html', error='Error processing the uploaded image.')
+                os.remove(filepath)  # Clean up if processing fails
+                return render_template('index.html',
+                                      error='Error processing the uploaded image.')
 
+            # Make a prediction using the loaded model
             predictions = model.predict(processed_image)
+            # Get the index of the class with the highest probability
             predicted_class_index = np.argmax(predictions)
+            # Map the predicted class index to the corresponding emotion label
             predicted_emotion = emotion_labels[predicted_class_index]
 
-            return render_template('result.html', prediction=predicted_emotion, image_path=filepath)
+            # Render the results template, passing the prediction and image path
+            return render_template('results.html', prediction=predicted_emotion,
+                                   image_path=filepath)
 
         except Exception as e:
-            return render_template('index.html', error=f'An error occurred during prediction: {e}')
+            # Handle any exceptions that occur during the prediction process
+            return render_template('index.html',
+                                  error=f'An error occurred during prediction: {e}')
 
-    return render_template('index.html', error='Invalid file type. Allowed types are png, jpeg, jpg.')
+    # If the file type is invalid, return an error
+    return render_template('index.html',
+                          error='Invalid file type. Allowed types are png, jpeg, jpg.')
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
