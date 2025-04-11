@@ -21,7 +21,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)  
 
 # Load the trained model (using the model.py code file)
-model_path = 'models/emotion_recognition_model_fer.h5'
+model_path = 'models/emotion_recognition_model_fer_v2.h5'
 try:
     model = load_model(model_path)
 
