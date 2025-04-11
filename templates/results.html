@@ -26,20 +26,73 @@
             margin-bottom: 20px;
         }
 
-        #execution-plan {
-            width: 100%;
-            height: 400px;
+        .step-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .step-box {
+            text-align: center;
+            padding: 10px;
             border: 1px solid #ccc;
-            margin-top: 20px;
+            border-radius: 5px;
+            flex: 1;
+            margin: 0 10px;
         }
 
-        .node-label {
-            font-size: 12px;
+        .step-image {
+            max-width: 200px; /* Increased image size */
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+        }
+
+        .arrow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #007bff; /* Colorized arrow */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle text shadow */
+        }
+
+        .model-box {
+            background-color: #343a40; /* Darker background for model */
+            color: white;
+            padding: 20px;
+            border-radius: 50%; /* Circle shape */
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+            font-size: 1.1em;
             font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow for model */
         }
 
-        .edge-label {
-            font-size: 10px;
+        .output-box {
+            background-color: #28a745; /* Green for output */
+            color: white;
+            padding: 10px;
+            border-radius: 50%; /* Circle shape */
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .probability-table {
@@ -50,23 +103,58 @@
         .probability-table td {
             padding: 8px;
             text-align: center;
+            border-bottom: 1px solid #dee2e6; /* Add horizontal lines */
+        }
+
+        .probability-table thead th {
+            background-color: #007bff; /* Header background color */
+            color: white;
+        }
+
+        .probability-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2; /* Alternate row color */
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.22.1/cytoscape.min.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>Emotion Prediction Results</h1>
 
-        <div id="execution-plan"></div>
+        <h2>Prediction Process</h2>
+        <div class="step-container">
+            <div class="step-box">
+                <p class="node-label">Input Image</p>
+                <img src="data:image/jpeg;base64,{{ results_data.original_image_base64 }}" alt="Original Image" class="step-image">
+            </div>
+            <div class="arrow-container">
+                <span class="arrow">&rarr;</span>
+            </div>
+            <div class="step-box">
+                <p class="node-label">Preprocessed Image</p>
+                <img src="data:image/jpeg;base64,{{ results_data.processed_image_base64 }}" alt="Preprocessed Image" class="step-image">
+                <p class="node-label">(Grayscale, Resized)</p>
+            </div>
+            <div class="arrow-container">
+                <span class="arrow">&rarr;</span>
+            </div>
+            <div class="step-box">
+                <p class="node-label">Model</p>
+                <div class="model-box">
+                   CNN
+                </div>
+            </div>
+            <div class="arrow-container">
+                <span class="arrow">&rarr;</span>
+            </div>
+            <div class="step-box">
+                <p class="node-label">Output</p>
+                <div class="output-box">
+                    {{ results_data.predicted_emotion.capitalize() }}
+                </div>
+            </div>
+        </div>
 
-        <p>Predicted Emotion: <strong>{{ execution_plan.predicted_emotion.capitalize() }}</strong></p>
-
-        <img src="{{ execution_plan.original_image_path }}" alt="Uploaded Image" style="max-width: 200px; height: auto; margin: 10px auto; display: block;">
-
-        <p>Preprocessed Image Shape: {{ execution_plan.preprocessed_shape }}</p>
-        <p>Model Architecture: {{ execution_plan.model_architecture }}</p>
-
+        <h2>Prediction Probabilities</h2>
         <table class="table probability-table">
             <thead>
                 <tr>
@@ -75,7 +163,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for emotion, probability in execution_plan.all_emotions_probabilities.items() %}
+                {% for emotion, probability in results_data.all_emotions_probabilities.items() %}
                 <tr>
                     <td>{{ emotion.capitalize() }}</td>
                     <td>{{ probability }}</td>
@@ -86,67 +174,5 @@
 
         <a href="/" class="btn btn-primary">Try Another Image</a>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var cy = cytoscape({
-                container: document.getElementById('execution-plan'),
-                elements: [
-                    { data: { id: 'upload', label: 'Uploaded' }, classes: 'node' },
-                    { data: { id: 'grayscale', label: 'Grayscale' }, classes: 'node' },
-                    { data: { id: 'resize', label: 'Resize' }, classes: 'node' },
-                    { data: { id: 'normalize', label: 'Normalize' }, classes: 'node' },
-                    { data: { id: 'model', label: 'Model', shape: 'roundrectangle' }, classes: 'node' },
-                    { data: { id: 'output', label: 'Output' }, classes: 'node' },
-
-                    { data: { source: 'upload', target: 'grayscale', label: 'Load' }, classes: 'edge' },
-                    { data: { source: 'grayscale', target: 'resize', label: 'Convert' }, classes: 'edge' },
-                    { data: { source: 'resize', target: 'normalize', label: 'Resize' }, classes: 'edge' },
-                    { data: { source: 'normalize', target: 'model', label: 'Process' }, classes: 'edge' },
-                    { data: { source: 'model', target: 'output', label: 'Predict' }, classes: 'edge' }
-                ],
-                style: [
-                    {
-                        selector: '.node',
-                        style: {
-                            'background-color': '#666',
-                            'label': 'data(label)',
-                            'width': '60px',
-                            'height': '60px',
-                            'text-valign': 'center',
-                            'text-halign': 'center',
-                            'font-size': '10px',
-                            'color': 'white'
-                        }
-                    },
-                    {
-                        selector: '.node[shape="roundrectangle"]',
-                        style: {
-                            'shape': 'roundrectangle',
-                            'width': '80px',
-                            'height': '80px',
-                            'background-color': '#007bff' /* Blue for Model */
-                        }
-                    },
-                    {
-                        selector: '.edge',
-                        style: {
-                            'width': 2,
-                            'line-color': '#ccc',
-                            'target-arrow-color': '#ccc',
-                            'target-arrow-shape': 'triangle',
-                            'curve-style': 'bezier',
-                            'label': 'data(label)',
-                            'font-size': '10px'
-                        }
-                    }
-                ],
-                layout: {
-                    name: 'grid',
-                    rows: 2
-                }
-            });
-        });
-    </script>
 </body>
 </html>

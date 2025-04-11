@@ -235,5 +235,3 @@ plt.tight_layout()
 plot_save_path = os.path.join(plots_dir, 'class_distribution.png')
 plt.savefig(plot_save_path)
 plt.show()
-
-print(f"Class distribution plot saved to {plots_save_path}")

@@ -5,7 +5,7 @@ import numpy as np
 import os
 from werkzeug.utils import secure_filename
 import cv2
-import json  # Import the json library
+import base64  # For encoding images
 
 app = Flask(__name__)
 
@@ -37,29 +37,38 @@ def allowed_file(filename):
         1].lower() in ALLOWED_EXTENSIONS
 
 
-def preprocess_image(img_path):
+def preprocess_image_for_display(img_path):
+    """
+    Loads and preprocesses the image for display in the browser.
+    Returns the original and preprocessed images as base64 encoded strings.
+    """
     try:
-        # Load the image using OpenCV for more flexibility
-        img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-        if img is None:
+        # Load the original image
+        original_img = cv2.imread(img_path)
+        if original_img is None:
             raise ValueError(f"Could not read image: {img_path}")
+        original_img = cv2.cvtColor(original_img, cv2.COLOR_BGR2RGB)  # Convert to RGB
 
-        # Resize the image
+        # Preprocess for the model (same as before)
+        img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
         img_resized = cv2.resize(img, (img_width, img_height),
-                                  interpolation=cv2.INTER_AREA)  # Use INTER_AREA for shrinking
-
-        # Convert to numpy array and expand dimensions
+                                  interpolation=cv2.INTER_AREA)
         img_array = np.expand_dims(img_resized, axis=-1)
         img_array = np.expand_dims(img_array, axis=0)
-
-        # Normalize pixel values
         img_array = img_array.astype('float32') / 255.0
 
-        return img_array
+        # Encode images to base64 for display
+        _, original_img_encoded = cv2.imencode('.jpg', original_img)
+        original_img_base64 = base64.b64encode(original_img_encoded).decode('utf-8')
+
+        _, processed_img_encoded = cv2.imencode('.jpg', img_resized)
+        processed_img_base64 = base64.b64encode(processed_img_encoded).decode('utf-8')
+
+        return original_img_base64, processed_img_base64, img_array  # Return original, processed, model input
 
     except Exception as e:
-        print(f"Error preprocessing image: {e}")
-        return None
+        print(f"Error preprocessing image for display: {e}")
+        return None, None, None
 
 
 @app.route('/', methods=['GET'])
@@ -90,8 +99,9 @@ def predict():
             # Save the uploaded file
             file.save(filepath)
 
-            # Preprocess the image
-            processed_image = preprocess_image(filepath)
+            # Preprocess the image for display AND model input
+            original_img_base64, processed_img_base64, processed_image = preprocess_image_for_display(
+                filepath)
 
             # Handle preprocessing errors
             if processed_image is None:
@@ -106,11 +116,10 @@ def predict():
             # Map the class index to the emotion label
             predicted_emotion = emotion_labels[predicted_class_index]
 
-            # Prepare data for the execution plan
-            execution_plan_data = {
-                "original_image_path": filepath,
-                "preprocessed_shape": processed_image.shape,
-                "model_architecture": "Custom CNN",  # More descriptive
+            # Prepare data for the results page
+            results_data = {
+                "original_image_base64": original_img_base64,  # Base64 encoded original image
+                "processed_image_base64": processed_img_base64,  # Base64 encoded processed image
                 "predicted_emotion": predicted_emotion,
                 "all_emotions_probabilities": {
                     label: round(float(prob), 3)
@@ -119,8 +128,7 @@ def predict():
             }
 
             # Render the results page
-            return render_template('results.html',
-                                   execution_plan=execution_plan_data)
+            return render_template('results.html', results_data=results_data)
 
         except Exception as e:
             # Handle general errors
