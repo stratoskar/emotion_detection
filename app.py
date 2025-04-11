@@ -1,34 +1,27 @@
-# Standard imports
-from flask import Flask, render_template, request, redirect, url_for # Build a web application
-from tensorflow.keras.models import load_model # Use a deep learning model
+from flask import Flask, render_template, request, redirect, url_for
+from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
-import os # Interract with the os
+import os
 from werkzeug.utils import secure_filename
 import cv2
 import json  # Import the json library
 
 app = Flask(__name__)
 
-# Configure upload folder where images will be saved
+# Configure upload folder and allowed extensions
 UPLOAD_FOLDER = 'uploads'
-
-# Configure allowed extentions of images the user can upload
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Create the upload folder if it doesn't exist
 
-# Create the upload folder if it doesn't exist
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)  
-
-# Load the trained model (using the model.py code file)
-model_path = 'models/emotion_recognition_model_fer_v2.h5'
+# Load your trained model
+model_path = 'models/emotion_recognition_model_fer_best.h5'  # Adjust path if needed
 try:
     model = load_model(model_path)
-
-    # classification outcomes
-    emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise','neutral']
+    emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad',
+                      'surprise']
     print("Model loaded successfully!")
-
 except Exception as e:
     print(f"Error loading the model: {e}")
     model = None
@@ -38,9 +31,11 @@ except Exception as e:
 # Define the target image size used during training
 img_width, img_height = 48, 48
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[
         1].lower() in ALLOWED_EXTENSIONS
+
 
 def preprocess_image(img_path):
     try:
@@ -115,10 +110,12 @@ def predict():
             execution_plan_data = {
                 "original_image_path": filepath,
                 "preprocessed_shape": processed_image.shape,
-                "model_architecture": "Robust CNN", 
+                "model_architecture": "Custom CNN",  # More descriptive
                 "predicted_emotion": predicted_emotion,
-                "all_emotions_probabilities": json.dumps(
-                    dict(zip(emotion_labels, predictions.tolist()[0])))  # Convert to JSON
+                "all_emotions_probabilities": {
+                    label: round(float(prob), 3)
+                    for label, prob in zip(emotion_labels, predictions.tolist()[0])
+                }
             }
 
             # Render the results page
