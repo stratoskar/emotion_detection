@@ -160,48 +160,4 @@ plots_dir = 'plots'
 if not os.path.exists(plots_dir):
     os.makedirs(plots_dir)
 
-# 15. Plot training and validation metrics
-plt.figure(figsize=(12, 10))
-
-# Plot training & validation loss
-plt.subplot(2, 2, 1)
-plt.plot(history.history['loss'], label='Training Loss')
-plt.plot(history.history['val_loss'], label='Validation Loss')
-plt.title('Training and Validation Loss')
-plt.xlabel('Epoch')
-plt.ylabel('Loss')
-plt.legend()
-
-# Plot training & validation accuracy
-plt.subplot(2, 2, 2)
-plt.plot(history.history['accuracy'], label='Training Accuracy')
-plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
-plt.title('Training and Validation Accuracy')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.legend()
-
-# Plot training & validation precision
-plt.subplot(2, 2, 3)
-plt.plot(history.history['precision'], label='Training Precision')
-plt.plot(history.history['val_precision'], label='Validation Precision')
-plt.title('Training and Validation Precision')
-plt.xlabel('Epoch')
-plt.ylabel('Precision')
-plt.legend()
-
-# Plot training & validation recall
-plt.subplot(2, 2, 4)
-plt.plot(history.history['recall'], label='Training Recall')
-plt.plot(history.history['val_recall'], label='Validation Recall')
-plt.title('Training and Validation Recall')
-plt.xlabel('Epoch')
-plt.ylabel('Recall')
-plt.legend()
-
-# 16. Save the plots to the 'plots' directory
-plots_save_path = os.path.join(plots_dir, 'training_metrics_v2.png') # Changed filename
-plt.savefig(plots_save_path)
-plt.show()
-
-print(f"Training plots saved to {plots_save_path}")
+# 295/295 - 558s - 2s/step - Precision: 0.7754 - Recall: 0.6113 - accuracy: 0.6985 - loss: 0.7404 - val_Precision: 0.8850 - val_Recall: 0.7812 - val_accuracy: 0.8242 - val_loss: 0.5066 - learning_rate: 1.2500e-04
