@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project implements a Convolutional Neural Network (CNN) to recognize emotions from facial expressions in images. It provides a web interface built with Flask for users to upload an image and receive a prediction of the dominant emotion. The system leverages TensorFlow/Keras for the model and HTML/CSS for the user interface.
+This project implements a Convolutional Neural Network (CNN) with attention mechanism to recognize emotions from facial expressions in images. It provides a web interface built with Flask for users to upload an image and receive a prediction of the dominant emotion. The system leverages TensorFlow/Keras for the model and HTML/CSS for the user interface.
 
 ## Purpose
 
@@ -47,12 +47,6 @@ The model consists of the following layers:
 5.  **Dense Layers:** Fully connected layers with ReLU activation and L2 regularization.
 6.  **Output Layer:** A Dense layer with softmax activation to produce the probability distribution over the seven emotion classes.
 
-**Key Architectural Features:**
-
-* **Attention Mechanism:** Improves the model's ability to focus on salient facial regions.
-* **Regularization (L2) and Dropout:** Techniques used to prevent overfitting and improve generalization.
-* **Batch Normalization:** Enhances training stability and speeds up convergence.
-
 ## Training Details
 
 * **Optimizer:** Adam
@@ -72,13 +66,13 @@ The performance of the emotion recognition model was evaluated using various met
 
 ![Training and Validation Accuracy Plot](plots/training_accuracy.png)
 
-_This plot shows the training and validation accuracy over epochs. It illustrates the model's learning progress and indicates how well it generalizes to unseen data. A significant divergence between training and validation accuracy might suggest overfitting, where the model performs well on the training data but poorly on new data._
+_This plot shows the training and validation accuracy over epochs. It illustrates the model's learning progress and indicates how well it generalizes to unseen data.
 
 ### Training and Validation Loss
 
 ![Training and Validation Loss Plot](plots/training_loss.png)
 
-_This plot displays the training and validation loss over epochs. It demonstrates the model's ability to minimize the prediction error on both training and validation sets. A decreasing trend in both losses is desirable, indicating that the model is learning effectively. An increasing validation loss while training loss decreases can also indicate overfitting._
+_This plot displays the training and validation loss over epochs. It demonstrates the model's ability to minimize the prediction error on both training and validation sets. A decreasing trend in both losses is desirable, indicating that the model is learning effectively.
 
 ### Training Precision
 
@@ -105,29 +99,12 @@ The web application, built with Flask, provides a user interface for interacting
 * `index.html`: The main page where users can upload an image.
 * `results.html`: Displays the prediction results, including the original and processed images, the predicted emotion, and the probability distribution for all emotions.
 
-## Setup and Installation
+## Future Improvements
 
-To set up and run the emotion recognition application, follow these steps:
+* Improve model accuracy with more advanced architectures (e.g., EfficientNet, Transformer-based models) or training techniques (e.g., data augmentation, transfer learning).
+* Explore techniques to handle occlusions and variations in pose and lighting conditions.
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <your_repository_url>
-    cd <your_repository_name>
-    ```
-    _(Replace `<your_repository_url>` and `<your_repository_name>` with the actual URL and name of your repository.)_
-2.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-    _(This will install all the necessary Python packages listed in the `requirements.txt` file. Make sure you have Python and pip installed.)_
-3.  **Download the FER-2013 dataset:**
-    * _(Provide specific instructions on where to download the dataset. If it's a link, include it. If it needs to be processed, explain the steps. Be very clear here.)_\
-        _Example:  Download the dataset from [Kaggle](https://www.kaggle.com/datasets/deadskull7/fer2013). After downloading, extract the files and place the `train/` and `test/` folders inside the `data/` directory of this project._
-4.  **Run the Flask application:**
-    ```bash
-    python app.py
-    ```
-5.  **Access the application in your browser:**
-    Open your web browser and go to `http://127.0.0.1:5000/`
+## Credits
 
-## Project Structure
+* **Author:** Efstratios Karkanis
+* **FER-2013 Dataset:** I.J. Goodfellow, et al. "Challenges in representation learning: A report on the 2013 Conference on Representation Learning (ICLR)." *arXiv preprint arXiv:1307.0414* (2013).
