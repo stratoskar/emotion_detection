@@ -1,5 +1,11 @@
 # Emotion Recognition from Facial Expressions
 
+[![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-%23000000.svg?style=flat&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[!TensorFlow](https://www.tensorflow.org/)
+[!Keras](https://keras.io/)
+[!scikit-learn](https://scikit-learn.org/stable/)
+
 ## Overview
 
 This project implements a Convolutional Neural Network (CNN) with attention mechanism to recognize emotions from facial expressions in images. It provides a web interface built with Flask for users to upload an image and receive a prediction of the dominant emotion. The system leverages TensorFlow/Keras for the model and HTML/CSS for the user interface.
@@ -108,10 +114,6 @@ The web application, built with Flask, provides a user interface for interacting
 
 This project was developed by Efstratios Karkanis (stratoskarkanis2@gmail.com). This code is primarily intended for educational purposes.
 
-##References
-
 ### Dataset
 
-I. J. Goodfellow et al., "Challenges in representation learning: A report on the 2013 Conference on Representation Learning (ICLR)," *arXiv preprint arXiv:1307.0414*, 2013.
-
-This project is licensed under the [MIT License](LICENSE). See the `LICENSE` file for details.
+[1] M. Sambare, FER-2013. (2017). Distributed by Kaggle. [Online]. Available: https://www.kaggle.com/datasets/msambare/fer2013. [Accessed: Apr. 12, 2025].
