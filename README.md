@@ -71,13 +71,13 @@ The performance of the emotion recognition model was evaluated using various met
 
 ![Training and Validation Accuracy Plot](plots/training_accuracy.png)
 
-_This plot shows the training and validation accuracy over epochs. It illustrates the model's learning progress and indicates how well it generalizes to unseen data.
+This plot shows the training and validation accuracy over epochs. It illustrates the model's learning progress and indicates how well it generalizes to unseen data.
 
 ### Training and Validation Loss
 
 ![Training and Validation Loss Plot](plots/training_loss.png)
 
-_This plot displays the training and validation loss over epochs. It demonstrates the model's ability to minimize the prediction error on both training and validation sets. A decreasing trend in both losses is desirable, indicating that the model is learning effectively.
+This plot displays the training and validation loss over epochs. It demonstrates the model's ability to minimize the prediction error on both training and validation sets. A decreasing trend in both losses is desirable, indicating that the model is learning effectively.
 
 ### Training Precision
 
