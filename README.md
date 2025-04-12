@@ -2,9 +2,8 @@
 
 [![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-%23000000.svg?style=flat&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[!TensorFlow](https://www.tensorflow.org/)
-[!Keras](https://keras.io/)
-[!scikit-learn](https://scikit-learn.org/stable/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=flat&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![Keras](https://img.shields.io/badge/Keras-%23D00000.svg?style=flat&logo=keras&logoColor=white)](https://keras.io/)
 
 ## Overview
 
