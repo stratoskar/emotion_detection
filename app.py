@@ -1,3 +1,4 @@
+# Import necessary libraries
 from flask import Flask, render_template, request, redirect, url_for
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
@@ -7,21 +8,27 @@ from werkzeug.utils import secure_filename
 import cv2
 import base64  # For encoding images
 
+# Create a flask application
 app = Flask(__name__)
 
-# Configure upload folder and allowed extensions
+# Configure upload folder and allowed image extensions that a user can upload
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Create the upload folder if it doesn't exist
 
-# Load your trained model
-model_path = 'models/emotion_recognition_model_fer_best.h5'  # Adjust path if needed
+# Create the upload folder if it doesn't exist
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  
+
+# Load the trained CNN model
+model_path = 'model/emotion_recognition_model_fer_best.h5'
 try:
     model = load_model(model_path)
-    emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad',
-                      'surprise']
+
+    # Define the emotion labels based on the model's output
+    emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad','surprise'] 
     print("Model loaded successfully!")
+
 except Exception as e:
     print(f"Error loading the model: {e}")
     model = None
@@ -30,7 +37,6 @@ except Exception as e:
 
 # Define the target image size used during training
 img_width, img_height = 48, 48
-
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[
@@ -70,12 +76,12 @@ def preprocess_image_for_display(img_path):
         print(f"Error preprocessing image for display: {e}")
         return None, None, None
 
-
+# Function to serve the home page of the website
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
-
+# Function that is executed when the user makes a POST request to the /predict endpoint
 @app.route('/predict', methods=['POST'])
 def predict():
     if model is None:
@@ -138,6 +144,6 @@ def predict():
     return render_template('index.html',
                           error='Invalid file type. Allowed types are png, jpeg, jpg.')
 
-
+# Execute the application
 if __name__ == '__main__':
     app.run(debug=False)
