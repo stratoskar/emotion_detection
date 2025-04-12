@@ -115,4 +115,4 @@ This project was developed by Efstratios Karkanis (stratoskarkanis2@gmail.com). 
 
 ## Dataset
 
-[1] M. Sambare, FER-2013. (2017). Distributed by Kaggle. [Online]. Available: https://www.kaggle.com/datasets/msambare/fer2013. [Accessed: Apr. 12, 2025].
+[1] M. Sambare, FER-2013. (2017). Distributed by Kaggle. Available: https://www.kaggle.com/datasets/msambare/fer2013. [Accessed: Apr. 9, 2025].
