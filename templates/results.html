@@ -7,112 +7,112 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
-            padding-top: 50px;
-            font-family: sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+            padding-top: 50px; /* Add some padding at the top */
+            font-family: sans-serif; /* Use a standard sans-serif font */
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px; /* Limit the maximum width of the container */
+            margin: 0 auto; /* Center the container horizontally */
+            background-color: #fff; /* White background for the content area */
+            padding: 20px; /* Add padding inside the container */
+            border-radius: 8px; /* Round the corners of the container */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow to the container */
         }
 
         h1 {
-            text-align: center;
-            margin-bottom: 20px;
+            text-align: center; /* Center the main heading */
+            margin-bottom: 20px; /* Add some space below the heading */
         }
 
         .step-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
+            display: flex; /* Use flexbox to arrange the steps horizontally */
+            align-items: center; /* Vertically align items in the center */
+            justify-content: center; /* Horizontally distribute space around items */
+            margin-bottom: 20px; /* Add space below the step container */
         }
 
         .step-box {
-            text-align: center;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            flex: 1;
-            margin: 0 10px;
+            text-align: center; /* Center text within each step box */
+            padding: 10px; /* Add padding inside each step box */
+            border: 1px solid #ccc; /* Add a light gray border */
+            border-radius: 5px; /* Round the corners of the border */
+            flex: 1; /* Make each step box take equal width */
+            margin: 0 10px; /* Add horizontal margin between step boxes */
         }
 
         .step-image {
-            max-width: 200px; /* Increased image size */
-            height: auto;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+            max-width: 200px; /* Increased maximum width of the images */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 5px; /* Round the corners of the images */
+            margin-bottom: 10px; /* Add space below the images */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow to the images */
         }
 
         .arrow-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 80px;
+            display: flex; /* Use flexbox for the arrow container */
+            align-items: center; /* Vertically align the arrow */
+            justify-content: center; /* Horizontally center the arrow */
+            width: 80px; /* Set a fixed width for the arrow container */
         }
 
         .arrow {
-            font-size: 2em;
-            color: #007bff; /* Colorized arrow */
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle text shadow */
+            font-size: 2em; /* Increase the size of the arrow */
+            color: #007bff; /* Colorize the arrow with Bootstrap primary color */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle text shadow to the arrow */
         }
 
         .model-box {
-            background-color: #343a40; /* Darker background for model */
-            color: white;
-            padding: 20px;
-            border-radius: 50%; /* Circle shape */
-            width: 120px;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 10px auto;
-            font-size: 1.1em;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow for model */
+            background-color: #343a40; /* Dark gray background for the model box */
+            color: white; /* White text color */
+            padding: 20px; /* Add padding inside the model box */
+            border-radius: 50%; /* Make it a circle */
+            width: 120px; /* Fixed width */
+            height: 120px; /* Fixed height */
+            display: flex; /* Use flexbox for centering content */
+            align-items: center; /* Vertically center content */
+            justify-content: center; /* Horizontally center content */
+            margin: 10px auto; /* Center the box horizontally with some vertical margin */
+            font-size: 1.1em; /* Slightly larger font size */
+            font-weight: bold; /* Bold text */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow for the model box */
         }
 
         .output-box {
-            background-color: #28a745; /* Green for output */
-            color: white;
-            padding: 10px;
-            border-radius: 50%; /* Circle shape */
-            width: 120px;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 10px auto;
-            font-size: 1.5em;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #28a745; /* Green background for the output box */
+            color: white; /* White text color */
+            padding: 10px; /* Add padding inside the output box */
+            border-radius: 50%; /* Make it a circle */
+            width: 120px; /* Fixed width */
+            height: 120px; /* Fixed height */
+            display: flex; /* Use flexbox for centering content */
+            align-items: center; /* Vertically center content */
+            justify-content: center; /* Horizontally center content */
+            margin: 10px auto; /* Center the box horizontally with some vertical margin */
+            font-size: 1.5em; /* Larger font size for the output */
+            font-weight: bold; /* Bold text */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow for the output box */
         }
 
         .probability-table {
-            margin-top: 20px;
+            margin-top: 20px; /* Add space above the probability table */
         }
 
         .probability-table th,
         .probability-table td {
-            padding: 8px;
-            text-align: center;
-            border-bottom: 1px solid #dee2e6; /* Add horizontal lines */
+            padding: 8px; /* Add padding inside table cells */
+            text-align: center; /* Center text in table cells */
+            border-bottom: 1px solid #dee2e6; /* Add a light gray horizontal line between rows */
         }
 
         .probability-table thead th {
-            background-color: #007bff; /* Header background color */
-            color: white;
+            background-color: #007bff; /* Blue background for table header */
+            color: white; /* White text color for table header */
         }
 
         .probability-table tbody tr:nth-child(even) {
-            background-color: #f2f2f2; /* Alternate row color */
+            background-color: #f2f2f2; /* Light gray background for even rows for better readability */
         }
     </style>
 </head>
