@@ -103,3 +103,21 @@ The web application, built with Flask, provides a user interface for interacting
 
 * Improve model accuracy with more advanced architectures (e.g., EfficientNet, Transformer-based models) or training techniques (e.g., data augmentation, transfer learning).
 * Explore techniques to handle occlusions and variations in pose and lighting conditions.
+
+Author
+
+This project was developed by Efstratios Karkanis (stratoskarkanis2@gmail.com). This code is primarily intended for educational purposes.
+
+References
+
+### Dataset
+
+I. J. Goodfellow et al., "Challenges in representation learning: A report on the 2013 Conference on Representation Learning (ICLR)," *arXiv preprint arXiv:1307.0414*, 2013.
+
+### Related Work
+
+O. Arriaga, P. G. Plöger, and M. Valdenegro, "Real-time facial expression recognition tutorial," *CoRR*, abs/1705.02788, 2017.
+
+License
+
+This project is licensed under the [MIT License](LICENSE). See the `LICENSE` file for details.
