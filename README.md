@@ -103,8 +103,3 @@ The web application, built with Flask, provides a user interface for interacting
 
 * Improve model accuracy with more advanced architectures (e.g., EfficientNet, Transformer-based models) or training techniques (e.g., data augmentation, transfer learning).
 * Explore techniques to handle occlusions and variations in pose and lighting conditions.
-
-## Credits
-
-* **Author:** Efstratios Karkanis
-* **FER-2013 Dataset:** I.J. Goodfellow, et al. "Challenges in representation learning: A report on the 2013 Conference on Representation Learning (ICLR)." *arXiv preprint arXiv:1307.0414* (2013).
