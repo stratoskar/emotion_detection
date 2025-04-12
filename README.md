@@ -83,19 +83,19 @@ This plot displays the training and validation loss over epochs. It demonstrates
 
 ![Training Precision Plot](plots/training_precision.png)
 
-_This plot visualizes the training precision over epochs. Precision measures the proportion of correctly predicted positive cases among all instances predicted as positive. High precision indicates fewer false positives, meaning the model is more reliable when it predicts a specific emotion._
+This plot visualizes the training precision over epochs. Precision measures the proportion of correctly predicted positive cases among all instances predicted as positive. High precision indicates fewer false positives, meaning the model is more reliable when it predicts a specific emotion._
 
 ### Training Recall
 
 ![Training Recall Plot](plots/training_recall.png)
 
-_This plot shows the training recall over epochs. Recall measures the proportion of correctly predicted positive cases among all actual positive instances. High recall indicates fewer false negatives, meaning the model is good at identifying all instances of a specific emotion._
+This plot shows the training recall over epochs. Recall measures the proportion of correctly predicted positive cases among all actual positive instances. High recall indicates fewer false negatives, meaning the model is good at identifying all instances of a specific emotion._
 
 ### Class Distribution
 
 ![Class Distribution Plot](plots/class_distribution.png)
 
-_This plot illustrates the distribution of samples across the seven emotion classes in the training dataset. It highlights potential class imbalance, where some emotions have significantly more training examples than others. Class imbalance can bias the model towards the majority classes, which was addressed during training using class weights to give more importance to the minority classes._
+This plot illustrates the distribution of samples across the seven emotion classes in the training dataset. It highlights class imbalance, where some emotions have significantly more training examples than others. Class imbalance can bias the model towards the majority classes, which was addressed during training using class weights to give more importance to the minority classes.
 
 ## Web Application
 
